@@ -32,16 +32,13 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.inventory_2_rounded, size: 72, color: Colors.indigo),
-                  const SizedBox(height: 12),
-                  const Text(
-                    'Gudangku',
-                    style: TextStyle(
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.indigo,
-                    ),
+                  // Ganti Icon jadi Image.asset
+                  Image.asset(
+                    'lib/images/ab-removebg-preview.png', // Ganti sesuai nama file kamu
+                    height: 200, // Atur ukuran logo
                   ),
+                  const SizedBox(height: 12),
+                  
                   const SizedBox(height: 24),
                   CustomTextField(
                     controller: emailController,
@@ -56,12 +53,11 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 24),
                   SizedBox(
                     width: double.infinity,
-                     child: TextButton(
+                    child: TextButton(
                       onPressed: () {
-                        // TODO: arahkan ke halaman reset password
                         Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
                           return MainPage();
-                        })  );
+                        }));
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo,
@@ -81,7 +77,6 @@ class LoginScreen extends StatelessWidget {
                     alignment: Alignment.centerRight,
                     child: TextButton(
                       onPressed: () {
-                        // TODO: arahkan ke halaman reset password
                         Navigator.pushNamed(context, '/forgot-password');
                       },
                       child: const Text(
@@ -97,7 +92,6 @@ class LoginScreen extends StatelessWidget {
                       const Text("Belum punya akun? "),
                       TextButton(
                         onPressed: () {
-                          // TODO: arahkan ke halaman register
                           Navigator.pushNamed(context, '/register');
                         },
                         child: const Text('Daftar'),
