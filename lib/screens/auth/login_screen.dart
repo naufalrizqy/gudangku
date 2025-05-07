@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gudangku/pages/main_page.dart';
 import '../../widgets/custom_text_field.dart';
+import '../../services/auth_service.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -54,11 +55,46 @@ class LoginScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: TextButton(
-                      onPressed: () {
-                        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context){
-                          return MainPage();
-                        }));
+                      onPressed: () async {
+                        final email = emailController.text.trim();
+                        final password = passwordController.text.trim();
+
+                        if (email.isEmpty || password.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Email dan password harus diisi.")),
+                          );
+                          return;
+                        }
+
+                        try {
+                          final response = await AuthService.login(email, password);
+
+                          if (response != null && response['token'] != null) {
+                            final token = response['token'];
+                            print("Login berhasil! Token: $token");
+
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (_) => const MainPage()),
+                            );
+                          } else {
+                            // Log error ke console
+                            print('Login gagal: ${response?['message'] ?? 'Tidak ada respons'}');
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text(response?['message'] ?? 'Login gagal, periksa email dan password')),
+                            );
+                          }
+                        } catch (e) {
+                          // Log error exception
+                          print('Terjadi error saat login: $e');
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Terjadi kesalahan saat mencoba login')),
+                          );
+                        }
                       },
+
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo,
                         padding: const EdgeInsets.symmetric(vertical: 14),
